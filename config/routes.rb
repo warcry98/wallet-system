@@ -7,4 +7,13 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  post "login", to: "authentication#login"
+  resources :transactions, only: [ :create ]
+  resources :stock do
+    collection do
+      get :price
+      get :prices
+      get :all_prices
+    end
+  end
 end

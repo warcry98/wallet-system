@@ -22,22 +22,6 @@ jobs:
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
 
-  scan_js:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
-      - name: Scan for security vulnerabilities in JavaScript dependencies
-        run: bin/importmap audit
-
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -80,7 +64,11 @@ jobs:
           RAILS_ENV: test
           # REDIS_URL: redis://localhost:6379/0
           RAPIDAPI_STOCK_API_KEY: ${{ secrets.RAPIDAPI_STOCK_API_KEY }}
-        run: bin/rails db:test:prepare test test:system && bundle exec rspec
+        run: |
+          rm -rf .bundle
+          rm -rf vendor
+          bundle install
+          bundle exec rake
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4

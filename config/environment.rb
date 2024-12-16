@@ -3,3 +3,5 @@ require_relative "application"
 
 # Initialize the Rails application.
 Rails.application.initialize!
+
+config.active_support.to_time_preserves_timezone = :zone
